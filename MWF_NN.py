@@ -15,7 +15,7 @@ from sklearn.model_selection import GridSearchCV
 def custom_loss_function(y_actual,y_pred):
   Rayleigh_dist = (y_actual / K.square(rayleigh_B)) * K.exp(-(K.square(y_actual))/(2*K.square(rayleigh_B)))
   Rayleigh_max = (rayleigh_B / K.square(rayleigh_B)) * K.exp(-(K.square(rayleigh_B))/(2*K.square(rayleigh_B)))
-  weight =  ((-1 * Rayleigh_dist) + Rayleigh_max) / Rayleigh_max
+  weight =  0.8 * ((-1 * Rayleigh_dist) + Rayleigh_max) / Rayleigh_max + 0.2
   custom_loss_value = weight*K.mean(K.square((y_actual-y_pred)))
 
   return custom_loss_value 
@@ -87,7 +87,7 @@ model.summary()
 callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=20)
 
 history = model.fit(x_train, y_train,
-          validation_split=0.1,           
+          validation_split=0.2,           
           batch_size=batch_size,
           callbacks=[callback],
           epochs=epochs,
